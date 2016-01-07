@@ -1,0 +1,11 @@
+Maximumérték a méréskor kb. 220 volt.
+
+ÉRME	ÉRTÉK
+5	92
+100	56
+10	48
+20	28
+50	20
+200	12
+
+Az érméket átmérõ szerint növekvõ sorrendben tettük a panelre...
