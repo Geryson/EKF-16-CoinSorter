@@ -27,6 +27,8 @@ bool van_erme_kivetel = false;
 int address = 0;
 byte value;
 int coinsnumber[6]; //a felhasználó által megadott értékek eltárolására (csak ki kérni való érmékhez)
+char key;
+int ermekertekkel[7];
 
 void setup() {
   Serial.begin(9600);
@@ -38,15 +40,150 @@ void setup() {
 
 void loop() {
 
-  
+  key = kpd.getKey();
 
-  char key = kpd.getKey();
+  //# visszaléps, kilépés
+  //A lekérdezi mennyi pénzünk van
+  //B érme kikérés
+
+  //menu
+
+  bool menustate = true; //ha a menube vagyunk akkor igaz
+
+  if (menustate == true)
+  {
+    if (key == 'A') {
+      sumcoins();  //ki is kellene rakni a képernyőre
+    }
+    if (key == 'B') {
+      osszetettkikeres();  //ki kell szedni a menuböl lehet (képernyő)
+    }
+    if (key == 'C') { } //összeg alapján való érme kérés
+    if (key == 'D') { coinsput(); } //érme bedobást tervezünk
+    
+  }
+  else {
+    if (key == '#') {
+      menustate == true;  //vissza kell juttatni a menube
+    }
+  }
+
+
+  //menu vege
+
+
+
+
   if (key) // Check for a valid key.
   {
     Serial.println(key);
   }
 
-  if ((String) key == "*") //akkor érméket akar kikérni
+
+
+}
+
+bool coinsput()
+{
+  bool r = false;
+  if (van_erme) { r = true;}
+while (van_erme) {
+    //erme vizsgálat hogy milyen érme van
+
+    //cimek:0-5-ig 5-200-ig növekvősorrendbe
+    //6 -> össz érme
+
+    int erme_neve = 20; //ide a megvizsgált érme neve kell (5-200)
+
+    coinsadd(erme_neve);
+
+    value = EEPROM.read(address);
+
+    Serial.print(address);
+    Serial.print("\t");
+    Serial.print(value, DEC);
+    Serial.println();
+
+
+    address = address + 1;
+    if (address == 6) {
+      address = 0;
+    }
+
+    delay(500);
+  }
+  
+  return r;
+}
+
+void sumcoins()
+{
+  int sum = 0;
+
+  ermekertekkel[0] = EEPROM.read(0) * 5;
+  ermekertekkel[1] = EEPROM.read(1) * 10;
+  ermekertekkel[2] = EEPROM.read(2) * 20;
+  ermekertekkel[3] = EEPROM.read(3) * 50;
+  ermekertekkel[4] = EEPROM.read(4) * 100;
+  ermekertekkel[5] = EEPROM.read(5) * 200;
+
+  for (int i = 0; i < 6; i++)
+  {
+    sum += ermekertekkel[i];
+  }
+  ermekertekkel[6] = sum;
+}
+
+
+void sumkikeres()
+{ //összef alapján akarja ki kérni
+  //akkor érméket akar kikérni //már nem szükséges
+  if ((String) key == "*")
+  {
+    van_erme_kivetel = true;
+    String values;
+    while ((String) key != "#") {
+      /*
+      keyprevious = key;
+      while (key == keyprevious) {}
+      */
+      values = values + key ; //(String)
+    }
+    int val = values.toInt();
+    
+
+  coinsnumber[5] = (int) val / 200; val = val % 200;
+  coinsnumber[4] = (int) val / 100; val = val % 100;
+  coinsnumber[3] = (int) val / 50; val = val % 50;
+  coinsnumber[2] = (int) val / 20; val = val % 20;
+  coinsnumber[1] = (int) val / 10; val = val % 10;
+  coinsnumber[0] = (int) val / 5; val = val % 5;
+  
+  
+    //szeparálás
+    Serial.println((String) values);
+  }
+
+  int coinfive = coinsnumber[0];
+  int cointen = coinsnumber[1];
+  int cointwenty = coinsnumber[2];
+  int coinfifty = coinsnumber[3];
+  int coinhousand = coinsnumber[4];
+  int cointwohousand = coinsnumber[5];
+
+  //int ossz_erme_kivetel; //összadja hogy hány db érmét kell összesen kivenni pl.: két 5ft meg négy 10ft az 6 érme
+  //ossz_erme_kivetel = coinfive + cointen + cointwenty + coinfifty + counhousand + cointwohousand;
+
+
+  coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
+
+}
+
+
+void osszetettkikeres()
+{
+  //akkor érméket akar kikérni //már nem szükséges
+  if ((String) key == "*")
   {
     van_erme_kivetel = true;
     String values;
@@ -68,52 +205,172 @@ void loop() {
       switch (n)
       {
         case 0:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 1:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 2:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 3:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 4:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 5:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 6:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 7:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
         case 8:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
-         numberprev = true;
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
+          numberprev = true;
           break;
 
         case 9:
-        if(numberprev == true && sqrprev == false) { number = number + n; } else { if (numberprev == true && sqrprev == true) {szorzo[1] = n; } else { if (sqrprev == false) {number = n;} else {szorzo[0] = n;}}}
+          if (numberprev == true && sqrprev == false) {
+            number = number + n;
+          } else {
+            if (numberprev == true && sqrprev == true) {
+              szorzo[1] = n;
+            } else {
+              if (sqrprev == false) {
+                number = n;
+              } else {
+                szorzo[0] = n;
+              }
+            }
+          }
           numberprev = true;
           break;
 
@@ -124,8 +381,13 @@ void loop() {
           break;
 
         case 66: //"B" +:
-          values[i] =43;
-          if (numberprev == true) { keepdata(number, szorzo); number = ""; szorzo[0] = -1; szorzo[1]= -1;}
+          values[i] = 43;
+          if (numberprev == true) {
+            keepdata(number, szorzo);
+            number = "";
+            szorzo[0] = -1;
+            szorzo[1] = -1;
+          }
           numberprev = false;
           break;
 
@@ -155,38 +417,12 @@ void loop() {
     Serial.println((String) values);
   }
 
-  while (van_erme) {
-    //erme vizsgálat hogy milyen érme van
-
-    //cimek:0-5-ig 5-200-ig növekvősorrendbe
-    //6 -> össz érme
-
-    int erme_neve = 20; //ide a megvizsgált érme neve kell (5-200)
-
-    coinsadd(erme_neve);
-
-    value = EEPROM.read(address);
-
-    Serial.print(address);
-    Serial.print("\t");
-    Serial.print(value, DEC);
-    Serial.println();
-
-
-    address = address + 1;
-    if (address == 6) {
-      address = 0;
-    }
-
-    delay(500);
-  }
-
   int coinfive = coinsnumber[0];
-  int cointen= coinsnumber[1];
-  int cointwenty = coinsnumber[2]; 
-  int coinfifty=coinsnumber[3];
+  int cointen = coinsnumber[1];
+  int cointwenty = coinsnumber[2];
+  int coinfifty = coinsnumber[3];
   int coinhousand = coinsnumber[4];
-  int cointwohousand =coinsnumber[5];
+  int cointwohousand = coinsnumber[5];
 
   //int ossz_erme_kivetel; //összadja hogy hány db érmét kell összesen kivenni pl.: két 5ft meg négy 10ft az 6 érme
   //ossz_erme_kivetel = coinfive + cointen + cointwenty + coinfifty + counhousand + cointwohousand;
@@ -194,17 +430,52 @@ void loop() {
 
   coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
 
-
 }
 
 void keepdata(String number, int szorzo[])
 {
-  if (number == "5") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
-  if (number == "10") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
-  if (number == "20") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
-  if (number == "50") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
-  if (number == "100") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
-  if (number == "200") { if (szorzo[1] > -1 ) {coinsnumber[0] = szorzo[0]*10 +szorzo[1];} else { coinsnumber[0] = szorzo[0];}}
+  if (number == "5") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
+  if (number == "10") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
+  if (number == "20") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
+  if (number == "50") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
+  if (number == "100") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
+  if (number == "200") {
+    if (szorzo[1] > -1 ) {
+      coinsnumber[0] = szorzo[0] * 10 + szorzo[1];
+    } else {
+      coinsnumber[0] = szorzo[0];
+    }
+  }
 }
 
 void coinsadd(int erme_neve)
