@@ -56,11 +56,15 @@ void loop() {
       sumcoins();  //ki is kellene rakni a képernyőre
     }
     if (key == 'B') {
-      osszetettkikeres();  //ki kell szedni a menuböl lehet (képernyő)
+      bool sikeres = osszetettkikeres();  //ki kell szedni a menuböl lehet (képernyő)
     }
-    if (key == 'C') { } //összeg alapján való érme kérés
-    if (key == 'D') { coinsput(); } //érme bedobást tervezünk
-    
+    if (key == 'C') {
+      bool sikeres = sumkikeres();  //összeg alapján való érme kérés //ha false akkor kiírni a képernyőre hogy nincs elég pénz
+    }
+    if (key == 'D') {
+      coinsput();  //érme bedobást tervezünk
+    }
+
   }
   else {
     if (key == '#') {
@@ -86,8 +90,10 @@ void loop() {
 bool coinsput()
 {
   bool r = false;
-  if (van_erme) { r = true;}
-while (van_erme) {
+  if (van_erme) {
+    r = true;
+  }
+  while (van_erme) {
     //erme vizsgálat hogy milyen érme van
 
     //cimek:0-5-ig 5-200-ig növekvősorrendbe
@@ -112,7 +118,7 @@ while (van_erme) {
 
     delay(500);
   }
-  
+
   return r;
 }
 
@@ -135,7 +141,7 @@ void sumcoins()
 }
 
 
-void sumkikeres()
+bool sumkikeres() //akkor igaz ha a bankba elegendő érme van
 { //összef alapján akarja ki kérni
   //akkor érméket akar kikérni //már nem szükséges
   if ((String) key == "*")
@@ -144,22 +150,26 @@ void sumkikeres()
     String values;
     while ((String) key != "#") {
       /*
-      keyprevious = key;
-      while (key == keyprevious) {}
+        keyprevious = key;
+        while (key == keyprevious) {}
       */
       values = values + key ; //(String)
     }
     int val = values.toInt();
-    
+    sumcoins();
 
-  coinsnumber[5] = (int) val / 200; val = val % 200;
-  coinsnumber[4] = (int) val / 100; val = val % 100;
-  coinsnumber[3] = (int) val / 50; val = val % 50;
-  coinsnumber[2] = (int) val / 20; val = val % 20;
-  coinsnumber[1] = (int) val / 10; val = val % 10;
-  coinsnumber[0] = (int) val / 5; val = val % 5;
-  
-  
+    if (val > ermekertekkel[6]) { //biztonsági védelem, hogy ha keveseb az érme mint amit ki kér a felhasználó
+      return false;
+    }
+
+    coinsnumber[5] = (int) val / 200; if (coinsnumber[5] <= ermekertekkel[5]) { val = val % 200; } else { coinsnumber[5] = ermekertekkel[5]; val = val - (ermekertekkel[5] * 200); }
+    coinsnumber[4] = (int) val / 100; if (coinsnumber[4] <= ermekertekkel[4]) { val = val % 100; } else { coinsnumber[4] = ermekertekkel[4]; val = val - (ermekertekkel[4] * 100); }
+    coinsnumber[3] = (int) val / 50; if (coinsnumber[3] <= ermekertekkel[3]) { val = val % 50; } else { coinsnumber[3] = ermekertekkel[3]; val = val - (ermekertekkel[3] * 500); }
+    coinsnumber[2] = (int) val / 20; if (coinsnumber[5] <= ermekertekkel[2]) { val = val % 20; } else { coinsnumber[2] = ermekertekkel[2]; val = val - (ermekertekkel[2] * 20); }
+    coinsnumber[1] = (int) val / 10; if (coinsnumber[5] <= ermekertekkel[1]) { val = val % 10; } else { coinsnumber[1] = ermekertekkel[1]; val = val - (ermekertekkel[1] * 100); }
+    coinsnumber[0] = (int) val / 5; if (coinsnumber[5] <= ermekertekkel[0]) { val = val % 5; } else { coinsnumber[0] = ermekertekkel[0]; val = val - (ermekertekkel[0] * 5); }
+
+
     //szeparálás
     Serial.println((String) values);
   }
@@ -176,11 +186,11 @@ void sumkikeres()
 
 
   coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
-
+  return true;
 }
 
 
-void osszetettkikeres()
+bool osszetettkikeres()
 {
   //akkor érméket akar kikérni //már nem szükséges
   if ((String) key == "*")
@@ -416,7 +426,7 @@ void osszetettkikeres()
     //szeparálás
     Serial.println((String) values);
   }
-
+  if (coinsnumber[5] > ermekertekkel[5] || coinsnumber[4] > ermekertekkel[4] || coinsnumber[3] > ermekertekkel[3] || coinsnumber[2] > ermekertekkel[2] || coinsnumber[1] > ermekertekkel[1] || coinsnumber[0] > ermekertekkel[0]) { return false; }
   int coinfive = coinsnumber[0];
   int cointen = coinsnumber[1];
   int cointwenty = coinsnumber[2];
@@ -429,7 +439,7 @@ void osszetettkikeres()
 
 
   coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
-
+  return true;
 }
 
 void keepdata(String number, int szorzo[])
