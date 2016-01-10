@@ -149,11 +149,10 @@ bool sumkikeres() //akkor igaz ha a bankba elegendő érme van
     van_erme_kivetel = true;
     String values;
     while ((String) key != "#") {
-      /*
-        keyprevious = key;
-        while (key == keyprevious) {}
-      */
+      if (key != 45) {
       values = values + key ; //(String)
+      key = 45;
+      }
     }
     int val = values.toInt();
     sumcoins();
@@ -197,11 +196,10 @@ bool osszetettkikeres()
   {
     van_erme_kivetel = true;
     String values;
-    char keyprevious;
     while ((String) key != "#") {
-      keyprevious = key;
-      while (key == keyprevious) {}
+      if (key != 45) {
       values = values + key ; //(String)
+      key = 45; }
       //A szorzás, B összeadás [bevitel először hogy mit és aztán hogy hány darabot]  (pl.: 5A7B20A1 : 7db 5ft-os + 1db 20ft-os)
     }
 
