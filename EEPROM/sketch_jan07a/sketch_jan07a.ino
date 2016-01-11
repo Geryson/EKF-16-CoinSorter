@@ -49,7 +49,7 @@ void loop() {
 
  
   address = address + 1;
-  if (address == EEPROM.length()) {
+  if (address == 6) {
     address = 0;
   }
 
