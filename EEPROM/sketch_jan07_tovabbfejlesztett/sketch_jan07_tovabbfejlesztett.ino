@@ -38,6 +38,8 @@ void setup() {
 
 }
 
+bool menustate = true; //ha a menube vagyunk akkor igaz
+
 void loop() {
 
   key = kpd.getKey();
@@ -48,21 +50,25 @@ void loop() {
 
   //menu
 
-  bool menustate = true; //ha a menube vagyunk akkor igaz
+  
 
   if (menustate == true)
   {
     if (key == 'A') {
-      sumcoins();  //ki is kellene rakni a képernyőre
+      sumcoins(); Serial.print(ermekertekkel[6], DEC); //ki is kellene rakni a képernyőre
+      menustate == false;
     }
     if (key == 'B') {
       bool sikeres = osszetettkikeres();  //ki kell szedni a menuböl lehet (képernyő)
+      menustate == false;
     }
     if (key == 'C') {
-      bool sikeres = sumkikeres();  //összeg alapján való érme kérés //ha false akkor kiírni a képernyőre hogy nincs elég pénz
+      bool sikeres = sumkikeres(); Serial.print(sikeres); //összeg alapján való érme kérés //ha false akkor kiírni a képernyőre hogy nincs elég pénz
+      menustate == false;
     }
     if (key == 'D') {
       coinsput();  //érme bedobást tervezünk
+      menustate == false;
     }
 
   }
@@ -136,57 +142,115 @@ void sumcoins()
   for (int i = 0; i < 6; i++)
   {
     sum += ermekertekkel[i];
+
+    value = EEPROM.read(ermekertekkel[i]);
+
+    Serial.print(i);
+    Serial.print("\t");
+    Serial.print(value, DEC);
+    Serial.println();
+
+
+    address = address + 1;
+    if (address == 6) {
+      address = 0;
+    }
   }
   ermekertekkel[6] = sum;
+  value = EEPROM.read(ermekertekkel[6]);
+
+    Serial.print(6);
+    Serial.print("\t");
+    Serial.print(value, DEC);
+    Serial.println();
 }
 
 
 bool sumkikeres() //akkor igaz ha a bankba elegendő érme van
-{ //összef alapján akarja ki kérni
+{ //összeg alapján akarja ki kérni
   //akkor érméket akar kikérni //már nem szükséges
-  if ((String) key == "*")
-  {
-    van_erme_kivetel = true;
-    String values;
-    while ((String) key != "#") {
-      if (key != 45) {
-      values = values + key ; //(String)
-      key = 45;
+  key = kpd.getKey(); //nem frissül a key
+    while ((char) kpd.getKey() != '*')
+    { 
+      if (kpd.getKey() != NO_KEY) {
+      Serial.print("all"); delay(100);
       }
-    }
-    int val = values.toInt();
-    sumcoins();
+      if ( kpd.getKey() == '#') { return false; }
+      }
+      van_erme_kivetel = true;
+      String values;
+      while ( kpd.getKey() != 35) {
+        if (kpd.getKey() != NO_KEY) {
+          values = values + kpd.getKey() ; //(String)
+        
+        Serial.print("all2");
+        }
+        delay(100);
+      }
+      int val = values.toInt();
+      sumcoins();
 
-    if (val > ermekertekkel[6]) { //biztonsági védelem, hogy ha keveseb az érme mint amit ki kér a felhasználó
-      return false;
-    }
+      if (val > ermekertekkel[6]) { //biztonsági védelem, hogy ha keveseb az érme mint amit ki kér a felhasználó
+        return false;
+      }
 
-    coinsnumber[5] = (int) val / 200; if (coinsnumber[5] <= ermekertekkel[5]) { val = val % 200; } else { coinsnumber[5] = ermekertekkel[5]; val = val - (ermekertekkel[5] * 200); }
-    coinsnumber[4] = (int) val / 100; if (coinsnumber[4] <= ermekertekkel[4]) { val = val % 100; } else { coinsnumber[4] = ermekertekkel[4]; val = val - (ermekertekkel[4] * 100); }
-    coinsnumber[3] = (int) val / 50; if (coinsnumber[3] <= ermekertekkel[3]) { val = val % 50; } else { coinsnumber[3] = ermekertekkel[3]; val = val - (ermekertekkel[3] * 500); }
-    coinsnumber[2] = (int) val / 20; if (coinsnumber[5] <= ermekertekkel[2]) { val = val % 20; } else { coinsnumber[2] = ermekertekkel[2]; val = val - (ermekertekkel[2] * 20); }
-    coinsnumber[1] = (int) val / 10; if (coinsnumber[5] <= ermekertekkel[1]) { val = val % 10; } else { coinsnumber[1] = ermekertekkel[1]; val = val - (ermekertekkel[1] * 100); }
-    coinsnumber[0] = (int) val / 5; if (coinsnumber[5] <= ermekertekkel[0]) { val = val % 5; } else { coinsnumber[0] = ermekertekkel[0]; val = val - (ermekertekkel[0] * 5); }
+      coinsnumber[5] = (int) val / 200; if (coinsnumber[5] <= ermekertekkel[5]) {
+        val = val % 200;
+      } else {
+        coinsnumber[5] = ermekertekkel[5];
+        val = val - (ermekertekkel[5] * 200);
+      }
+      coinsnumber[4] = (int) val / 100; if (coinsnumber[4] <= ermekertekkel[4]) {
+        val = val % 100;
+      } else {
+        coinsnumber[4] = ermekertekkel[4];
+        val = val - (ermekertekkel[4] * 100);
+      }
+      coinsnumber[3] = (int) val / 50; if (coinsnumber[3] <= ermekertekkel[3]) {
+        val = val % 50;
+      } else {
+        coinsnumber[3] = ermekertekkel[3];
+        val = val - (ermekertekkel[3] * 500);
+      }
+      coinsnumber[2] = (int) val / 20; if (coinsnumber[5] <= ermekertekkel[2]) {
+        val = val % 20;
+      } else {
+        coinsnumber[2] = ermekertekkel[2];
+        val = val - (ermekertekkel[2] * 20);
+      }
+      coinsnumber[1] = (int) val / 10; if (coinsnumber[5] <= ermekertekkel[1]) {
+        val = val % 10;
+      } else {
+        coinsnumber[1] = ermekertekkel[1];
+        val = val - (ermekertekkel[1] * 100);
+      }
+      coinsnumber[0] = (int) val / 5; if (coinsnumber[5] <= ermekertekkel[0]) {
+        val = val % 5;
+      } else {
+        coinsnumber[0] = ermekertekkel[0];
+        val = val - (ermekertekkel[0] * 5);
+      }
 
 
-    //szeparálás
-    Serial.println((String) values);
+      //szeparálás
+      Serial.println((String) values);
+    
+
+    int coinfive = coinsnumber[0];
+    int cointen = coinsnumber[1];
+    int cointwenty = coinsnumber[2];
+    int coinfifty = coinsnumber[3];
+    int coinhousand = coinsnumber[4];
+    int cointwohousand = coinsnumber[5];
+
+    //int ossz_erme_kivetel; //összadja hogy hány db érmét kell összesen kivenni pl.: két 5ft meg négy 10ft az 6 érme
+    //ossz_erme_kivetel = coinfive + cointen + cointwenty + coinfifty + counhousand + cointwohousand;
+
+
+    coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
+    return true;
   }
 
-  int coinfive = coinsnumber[0];
-  int cointen = coinsnumber[1];
-  int cointwenty = coinsnumber[2];
-  int coinfifty = coinsnumber[3];
-  int coinhousand = coinsnumber[4];
-  int cointwohousand = coinsnumber[5];
-
-  //int ossz_erme_kivetel; //összadja hogy hány db érmét kell összesen kivenni pl.: két 5ft meg négy 10ft az 6 érme
-  //ossz_erme_kivetel = coinfive + cointen + cointwenty + coinfifty + counhousand + cointwohousand;
-
-
-  coinsremove(coinfive, cointen, cointwenty, coinfifty, coinhousand, cointwohousand );
-  return true;
-}
 
 
 bool osszetettkikeres()
@@ -198,8 +262,9 @@ bool osszetettkikeres()
     String values;
     while ((String) key != "#") {
       if (key != 45) {
-      values = values + key ; //(String)
-      key = 45; }
+        values = values + key ; //(String)
+        key = 45;
+      }
       //A szorzás, B összeadás [bevitel először hogy mit és aztán hogy hány darabot]  (pl.: 5A7B20A1 : 7db 5ft-os + 1db 20ft-os)
     }
 
@@ -424,7 +489,9 @@ bool osszetettkikeres()
     //szeparálás
     Serial.println((String) values);
   }
-  if (coinsnumber[5] > ermekertekkel[5] || coinsnumber[4] > ermekertekkel[4] || coinsnumber[3] > ermekertekkel[3] || coinsnumber[2] > ermekertekkel[2] || coinsnumber[1] > ermekertekkel[1] || coinsnumber[0] > ermekertekkel[0]) { return false; }
+  if (coinsnumber[5] > ermekertekkel[5] || coinsnumber[4] > ermekertekkel[4] || coinsnumber[3] > ermekertekkel[3] || coinsnumber[2] > ermekertekkel[2] || coinsnumber[1] > ermekertekkel[1] || coinsnumber[0] > ermekertekkel[0]) {
+    return false;
+  }
   int coinfive = coinsnumber[0];
   int cointen = coinsnumber[1];
   int cointwenty = coinsnumber[2];
