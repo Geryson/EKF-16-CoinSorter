@@ -1,3 +1,7 @@
+//PIROS - 5V
+//FEKETE - GND
+//FEHÉR - bármelyik PWM digitális port
+
 #include <Servo.h>
 Servo myServo;
  
