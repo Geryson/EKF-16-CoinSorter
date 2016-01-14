@@ -12,12 +12,7 @@ void setup() {
 }
 void loop() {
   
-  myServo.write(0);
-  delay(2000);
-  myServo.write(36);
-  delay(2000);
-  myServo.write(72);
-  delay(2000);
+  
   myServo.write(108);
   delay(2000);
   myServo.write(144);
