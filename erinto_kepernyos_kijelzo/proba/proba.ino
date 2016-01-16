@@ -66,36 +66,40 @@ Serial1.begin(9600);
 
 }
 
- int sum = 0;
-// String sum="";
+ //int sum = 0;
 void loop() {
-tft.setRotation(0);
-//if ( sum == 0 && Serial1.available()) {
+tft.setRotation(1);
+
 //if (! Serial1.available()) {
 //while(Serial1.available()){
 //  sum+=Serial1.read();
 
-sum = Serial1.read().toInt(); Serial.println(sum);
+//sum = Serial1.read(); Serial.println(sum, DEC);
+//sum2 = String(Serial1.read()); Serial.println(sum2.toInt(), DEC);
 /*}
 else{
 
   Serial.println("szar");
 }*/
-testText(sum);
+welcome();
 
 delay(2000);
 
 }
 
 
-unsigned long testText(int sum) {
+unsigned long welcome() {
   tft.fillScreen(BLACK);
   unsigned long start = micros();
-  tft.setCursor(0, 0);
+  tft.setCursor(1, 1);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
-  tft.println("Összesen:");
-  tft.setTextColor(YELLOW); tft.setTextSize(5);
-  tft.println(sum);
+  tft.println("Coin Sorter");
+  tft.setCursor(1, 40);
+  tft.setTextColor(YELLOW); tft.setTextSize(2);
+  tft.println("Szep napot!");
+  tft.setCursor(1, 60);
+  tft.setTextColor(BLUE); tft.setTextSize(2);
+  tft.println("Lassuk mennyi penzed van");   Serial.println(F("Lassuk mennyi penzed van :)"));
 
   return micros() - start;
 }

@@ -43,7 +43,9 @@ bool menustate = true; //ha a menube vagyunk akkor igaz
 void loop() {
 
   key = kpd.getKey();
-
+Serial1.print(150); Serial.println(150);
+Serial1.print("150");Serial.print("150");
+Serial1.print('150');Serial.print('150');
 
   //menu
 
