@@ -23,7 +23,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 void setup() {
   Serial.begin(9600);
   Serial.println(F("TFT LCD test"));
-Serial1.begin(9600);
+  Serial1.begin(9600);
 
 #ifdef USE_ADAFRUIT_SHIELD_PINOUT
   Serial.println(F("Using Adafruit 2.8\" TFT Arduino Shield Pinout"));
@@ -63,28 +63,84 @@ Serial1.begin(9600);
   }
 
   tft.begin(identifier);
+  tft.setRotation(1);
+  welcome();
+}
+
+//int sum = 0;
+void loop() {
+  tft.setRotation(1);
+
+Serial.println(); Serial.println(analogRead(A5));
+
+  int solar = analogRead(A5);
+  Serial.println(solar);
+  coinsput(solar);
+ delay (2000);
 
 }
 
- //int sum = 0;
-void loop() {
-tft.setRotation(1);
+bool coinsput(int solar)
+{
+  bool van_erme = false;
+  if ( solar < 100 ) {
+   van_erme = true;
+  }
+  bool r = false;
+  if (van_erme) {
+    r = true;
+  }
+  while (van_erme) {
+    //erme vizsgálat hogy milyen érme van
 
-//if (! Serial1.available()) {
-//while(Serial1.available()){
-//  sum+=Serial1.read();
+    //cimek:0-5-ig 5-200-ig növekvősorrendbe
+    //6 -> össz érme
 
-//sum = Serial1.read(); Serial.println(sum, DEC);
-//sum2 = String(Serial1.read()); Serial.println(sum2.toInt(), DEC);
-/*}
-else{
 
-  Serial.println("szar");
-}*/
-welcome();
+    String erme_neve = ""; //ide a megvizsgált érme neve kell (5-200)
 
-delay(2000);
+    if ( solar < 20 ) {
+      erme_neve = 200;
+    }
+    else {
+      if ( solar < 30 ) {
+        erme_neve = 100;
+      }
+      else {
+        if ( solar < 40 ) {
+          erme_neve = 50;
+        }
+        else {
+          if ( solar < 60 ) {
+            erme_neve = 20;
+          }
+          else {
+            if ( solar < 80 ) {
+              erme_neve = 10;
+            }
+            else {
+              if ( solar < 100 ) {
+                erme_neve = 5;
+              }
+            }
+          }
+        }
+      }
+    }
 
+    tft.fillScreen(BLACK);
+  unsigned long start = micros();
+  tft.setCursor(1, 1);
+  tft.setTextColor(WHITE);  tft.setTextSize(4);
+  tft.println("Actual coin:");
+  tft.setCursor(1, 40);
+  tft.setTextColor(RED); tft.setTextSize(4);
+  tft.print(erme_neve); tft.println(" Ft");
+    van_erme = false;
+    delay(500);
+  }
+
+  return r;
 }
 
 
