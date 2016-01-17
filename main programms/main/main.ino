@@ -35,7 +35,6 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-Serial1.begin(9600);
 }
 
 bool menustate = true; //ha a menube vagyunk akkor igaz
@@ -95,7 +94,6 @@ void loop() {
  int solar = analogRead(A0);
   Serial.println(solar);
   coinsput(solar);
-      coinsput(solar);
 
   
 
