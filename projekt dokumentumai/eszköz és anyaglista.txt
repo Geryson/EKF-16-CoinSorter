@@ -1,0 +1,11 @@
+- 1 db arduino leonardo
+- 1db arduiono micro
+- 1db continous servo motor
+- 1db standard servo motor
+- 1db solar szenzor
+- 1db 100 OHM-os ellenállás
+- 1db fehér 27k mC (milikandella) LED
+- (???) 4*4-es billentyûzetmátrix
+- 1db 2.4" TFT LCD (320*240)/SD - Arduino shield
+- kb. 20-30 db összekötõ vezeték
+- (???) 2db próbapanel
