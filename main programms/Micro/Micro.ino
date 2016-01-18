@@ -12,15 +12,18 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-
+pinMode(A5, OUTPUT);
 }
 
 
   int motor_standard = 9; //(PWM)
   int motor_continous = 10; //(PWM)
+  int standard_szog[6] = {2,28,54,82,110,138} ;
    
 
 void loop() { 
+  digitalWrite(A5,HIGH);
+  
  int solar = analogRead(A0);
   Serial.println(solar);
   coinsput(solar); //a coinsput fgv meghívja standard_motor fgvt, ami pedig meghívja a right_motor vagy left_motor fgv-t
@@ -34,33 +37,23 @@ void standard_motor (int szog, int erme_neve)
 {
   myServo.attach(motor_standard);
    myServo.write(szog);
-   if ( erme_neve == 5 || erme_neve == 10 || erme_neve == 20) {left_motor();} 
-   else {right_motor();}
+   {continous_motor();} 
   delay(2000);
   //majd álljon vissza 0 fokra
-  myServo.write(180);
-  delay(2000);
+  myServo.write(0);
 }
 
-void right_motor() {
+void continous_motor() {
   //órajárással megegyező irányba és vissza
   myServo.attach(motor_continous);
-  myServo.writeMicroseconds(1490);
-  delay(3000);
-  myServo.writeMicroseconds(1520);
-  delay(2996);
+ 
+  myServo.writeMicroseconds(1300);
+  delay(500);
+  myServo.writeMicroseconds(1700);
+  delay(522);
+  myServo.writeMicroseconds(1515);
   myServo.detach();
-  delay(2000);
-}
-
-void left_motor() {
-  myServo.attach(motor_continous);
-  myServo.writeMicroseconds(1520);
-  delay(3000);
-  myServo.writeMicroseconds(1490);
-  delay(2880);
-  myServo.detach();
-  delay(2000);
+  //  delay(500);
 }
 
 bool coinsput(int solar)
@@ -70,7 +63,9 @@ bool coinsput(int solar)
   if (van_erme) {
     r = true;
   }
-  while (van_erme) {
+  
+  
+  if (van_erme) {
     //erme vizsgálat hogy milyen érme van
 
     //cimek:0-5-ig 5-200-ig növekvősorrendbe
@@ -107,11 +102,16 @@ bool coinsput(int solar)
       }
     }
 
-    int standard_szog[3] = {45, 90, 135} ;
+    
 
-    if (erme_neve == 5 || erme_neve == 50) { standard_motor(standard_szog[0], erme_neve); }
-    else {if (erme_neve == 10 || erme_neve == 100) { standard_motor(standard_szog[1], erme_neve); } 
-    else {if (erme_neve == 20 || erme_neve == 200) { standard_motor(standard_szog[2], erme_neve); }}}
+    if (erme_neve == 5) { standard_motor(standard_szog[0], erme_neve); }
+    else {if (erme_neve == 10) { standard_motor(standard_szog[1], erme_neve); } 
+    else {if (erme_neve == 20) { standard_motor(standard_szog[2], erme_neve); } 
+    else {if (erme_neve == 50) { standard_motor(standard_szog[3], erme_neve); } 
+    else {if (erme_neve == 200) { standard_motor(standard_szog[4], erme_neve); } 
+    else {if (erme_neve == 100) { standard_motor(standard_szog[5], erme_neve); }}}}}}
+
+
     
     //a standard fgv ben állítjuk be a contionous motort
 

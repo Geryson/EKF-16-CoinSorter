@@ -11,7 +11,7 @@
 
 #define LCD_RESET A4 // Can alternately just connect to Arduino's reset pin
 
-#define  BLACK   0x0000
+#define BLACK   0x0000
 #define BLUE    0x001F
 #define RED     0xF800
 #define GREEN   0x07E0
@@ -77,15 +77,19 @@ void setup() {
   tft.setRotation(1);
 
   welcome();
+
+  for (int i=0; i <10; i++) {
+    coinsclear(i);
+  }
 }
 
 
 void loop() {
   tft.setRotation(1);
 
-Serial.println(); Serial.println(analogRead(A5));
+//Serial.println(); Serial.println(analogRead(A5));
 
-  int solar = analogRead(A5);
+  int solar = analogRead(A5)* 4;
   Serial.println(solar);
   coinsput(solar);
  delay (2000);
@@ -154,7 +158,8 @@ bool coinsput(int solar)
 
 unsigned long coin_state(String erme_neve) {
   unsigned long start = micros();
-  tft.fillScreen(BLACK);
+  tft.fillRect(1, 115, 100, 30, BLACK);
+  tft.fillRect(150, 150, 90, 30, BLACK);
   tft.setCursor(1, 1);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
   tft.println("Coin Sorter");
@@ -167,13 +172,15 @@ unsigned long coin_state(String erme_neve) {
   tft.setCursor(1, 80);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
   tft.println("Actual coin:");
-  tft.setCursor(1, 120);
+  tft.setCursor(1, 115);
   tft.setTextColor(RED); tft.setTextSize(4);
-  tft.print(erme_neve); tft.println(" Ft");
-  tft.setCursor(1, 140);
+  tft.print(erme_neve); 
+  tft.setCursor(100, 115); tft.setTextColor(WHITE); tft.setTextSize(3); tft.println(" FT");
+  tft.setCursor(1, 150);
   tft.setTextColor(WHITE); tft.setTextSize(3);
   sumcoins();
-  tft.print("Osszesen:"); tft.println(ermekertekkel[6]); tft.println(" Ft");
+  tft.print("Osszesen:"); tft.setTextColor(RED); tft.print(ermekertekkel[6]);
+  tft.setCursor(230, 150); tft.setTextColor(WHITE); tft.setTextSize(3); tft.print(" FT");
    
 
     return micros() - start;
@@ -209,26 +216,7 @@ void sumcoins()
   ermekertekkel[4] = EEPROM.read(4) * 100;
   ermekertekkel[5] = EEPROM.read(5) * 200;
 
-  for (int i = 0; i < 6; i++)
-  {
-    sum += ermekertekkel[i];
-
-    value = ermekertekkel[i];
-
-    Serial.print(i);
-    Serial.print("\t");
-    Serial.print(value, DEC);
-    Serial.println();
-   //coinsclear(i, 0);
-
-  }
-  ermekertekkel[6] = sum;
-  value = ermekertekkel[6];
-
-  Serial.print("Osszesen");
-  Serial.print("\t");
-  //Serial.print(value, DEC);
-  Serial.println();
+  
 }
 
 
@@ -339,8 +327,8 @@ bool coinsmodify(byte id, byte value) {
   Serial.print(id); Serial.print("_"); Serial.print(value); Serial.print("/");
   EEPROM.update(id, value);
 }
-void coinsclear(byte id, byte value) {
-  EEPROM.write(id, value);
+void coinsclear(byte id) {
+  EEPROM.write(id,0);
 
 }
 

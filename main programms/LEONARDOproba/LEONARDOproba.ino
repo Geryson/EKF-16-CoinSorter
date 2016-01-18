@@ -165,13 +165,13 @@ unsigned long coin_state(String erme_neve) {
   tft.setCursor(1, 80);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
   tft.println("Actual coin:");
-  tft.setCursor(1, 120);
+  tft.setCursor(1, 115);
   tft.setTextColor(RED); tft.setTextSize(4);
-  tft.print(erme_neve); tft.println(" Ft");
-  tft.setCursor(1, 140);
+  tft.print(erme_neve); tft.println(" FT");
+  tft.setCursor(1, 150);
   tft.setTextColor(WHITE); tft.setTextSize(3);
   sumcoins();
-  tft.print("Osszesen:"); tft.println(ermekertekkel[6]); tft.println(" Ft");
+  tft.print("Osszesen:"); tft.print(ermekertekkel[6]); tft.print(" FT");
    
 
     return micros() - start;
