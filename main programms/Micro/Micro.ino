@@ -3,6 +3,8 @@
 //FEHÉR - bármelyik PWM digitális port
 //MÉG NINCS KÉSZ!
 #include <Servo.h>
+#include <EEPROM.h>
+
 Servo myServo;
 
 bool van_erme = false;
@@ -13,8 +15,13 @@ void setup() {
   }
 
 pinMode(A5, OUTPUT);
+
+for (int i=0; i <10; i++) {
+    coinsclear(i);
+  }
 }
 
+int ermekertekkel[7];
 
   int motor_standard = 9; //(PWM)
   int motor_continous = 10; //(PWM)
@@ -23,14 +30,23 @@ pinMode(A5, OUTPUT);
 
 void loop() { 
   digitalWrite(A5,HIGH);
-  
- int solar = analogRead(A0);
+  int solar_sum = 0;
+for (int i =0; i< 10; i++) {
+ solar_sum += analogRead(A0);
+}
+ int solar = solar_sum / 10;
   Serial.println(solar);
   coinsput(solar); //a coinsput fgv meghívja standard_motor fgvt, ami pedig meghívja a right_motor vagy left_motor fgv-t
 
   //a delay-ekkel vigyázni kell vagy pedig többszálat kell használni
 
+}
 
+void folosleg ()
+{
+  myServo.attach(motor_standard);
+  myServo.write(170);
+   {continous_motor();} 
 }
 
 void standard_motor (int szog, int erme_neve)
@@ -38,9 +54,7 @@ void standard_motor (int szog, int erme_neve)
   myServo.attach(motor_standard);
    myServo.write(szog);
    {continous_motor();} 
-  delay(2000);
-  //majd álljon vissza 0 fokra
-  myServo.write(0);
+
 }
 
 void continous_motor() {
@@ -100,18 +114,17 @@ bool coinsput(int solar)
           }
         }
       }
-    }
+    }  
+    bool folosleg_bool = false;
+    if (erme_neve == 5 && ermekertekkel[0] < 10) { standard_motor(standard_szog[0], erme_neve); }
+    else {if (erme_neve == 10 && ermekertekkel[1] < 10) { standard_motor(standard_szog[1], erme_neve); } 
+    else {if (erme_neve == 20 && ermekertekkel[2] < 10) { standard_motor(standard_szog[2], erme_neve); } 
+    else {if (erme_neve == 50 && ermekertekkel[3] < 10) { standard_motor(standard_szog[3], erme_neve); } 
+    else {if (erme_neve == 200 && ermekertekkel[4] < 10) { standard_motor(standard_szog[4], erme_neve); } 
+    else {if (erme_neve == 100 && ermekertekkel[5] < 10) { standard_motor(standard_szog[5], erme_neve); }
+    else {folosleg (); folosleg_bool = false;}}}}}}
 
-    
-
-    if (erme_neve == 5) { standard_motor(standard_szog[0], erme_neve); }
-    else {if (erme_neve == 10) { standard_motor(standard_szog[1], erme_neve); } 
-    else {if (erme_neve == 20) { standard_motor(standard_szog[2], erme_neve); } 
-    else {if (erme_neve == 50) { standard_motor(standard_szog[3], erme_neve); } 
-    else {if (erme_neve == 200) { standard_motor(standard_szog[4], erme_neve); } 
-    else {if (erme_neve == 100) { standard_motor(standard_szog[5], erme_neve); }}}}}}
-
-
+    if (! folosleg_bool) { coinsadd(erme_neve); }
     
     //a standard fgv ben állítjuk be a contionous motort
 
@@ -121,8 +134,72 @@ bool coinsput(int solar)
 
   
   van_erme = false;
-    delay(500);
   }
 
   return r;
+}
+
+void sumcoins()
+{
+  int sum = 0;
+
+  ermekertekkel[0] = EEPROM.read(0) * 5;
+  ermekertekkel[1] = EEPROM.read(1) * 10;
+  ermekertekkel[2] = EEPROM.read(2) * 20;
+  ermekertekkel[3] = EEPROM.read(3) * 50;
+  ermekertekkel[4] = EEPROM.read(4) * 100;
+  ermekertekkel[5] = EEPROM.read(5) * 200;
+
+  
+}
+
+
+void coinsadd(int erme_neve)
+{
+  switch (erme_neve) {
+
+    case 5: coinsmodify(0, EEPROM.read(0) + 1);
+      coinsmodify(6, EEPROM.read(6) + 5);
+      break;
+
+    case 10: coinsmodify(1, EEPROM.read(1) + 1);
+      coinsmodify(6, EEPROM.read(6) + 10);
+      break;
+
+    case 20: coinsmodify(2, EEPROM.read(2) + 1);
+      coinsmodify(6, EEPROM.read(6) + 20);
+      break;
+
+    case 50: coinsmodify(3, EEPROM.read(3) + 1);
+      coinsmodify(6, EEPROM.read(6) + 50);
+      break;
+
+    case 100: coinsmodify(4, EEPROM.read(4) + 1);
+      coinsmodify(6, EEPROM.read(6) + 100);
+      break;
+
+    case 200: coinsmodify(5, EEPROM.read(5) + 1);
+      coinsmodify(6, EEPROM.read(6) + 200);
+      break;
+  }
+}
+
+bool coinsmodify(byte id, byte value) {
+  Serial.print(id); Serial.print("_"); Serial.print(value); Serial.print("/");
+  EEPROM.update(id, value);
+}
+void coinsclear(byte id) {
+  EEPROM.write(id,0);
+
+}
+
+byte coinsread() {
+  byte ermek[6];
+  ermek[0] = EEPROM.read(0);
+  ermek[1] = EEPROM.read(1);
+  ermek[2] = EEPROM.read(2);
+  ermek[3] = EEPROM.read(3);
+  ermek[4] = EEPROM.read(4);
+  ermek[5] = EEPROM.read(5);
+  return *ermek;
 }

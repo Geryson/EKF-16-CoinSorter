@@ -144,9 +144,12 @@ bool coinsput(int solar)
       }
     }
 
-    coinsadd(erme_neve.toInt());
-
-   coin_state(erme_neve);
+bool tele = true;
+    if (ermekertekkel[0] < 10 && ermekertekkel[1] < 10 && ermekertekkel[2] < 10 && ermekertekkel[3] < 10 && ermekertekkel[4] < 10 && ermekertekkel[5] < 10)
+  {
+    coinsadd(erme_neve.toInt()); tele = false;
+  }
+   coin_state(erme_neve, tele);
 
     van_erme = false;
     delay(500);
@@ -156,16 +159,20 @@ bool coinsput(int solar)
   return r;
 }
 
-unsigned long coin_state(String erme_neve) {
+unsigned long coin_state(String erme_neve, bool tele) {
   unsigned long start = micros();
   tft.fillRect(1, 115, 100, 30, BLACK);
   tft.fillRect(150, 150, 90, 30, BLACK);
+  tft.fillRect(1, 40, 200, 20, BLACK); // a szép napot szöveget kellene törölnie
   tft.setCursor(1, 1);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
   tft.println("Coin Sorter");
+  
+  if (tele) {
   tft.setCursor(1, 40);
   tft.setTextColor(YELLOW); tft.setTextSize(2);
-  tft.println("Szep napot!");
+  tft.println("Tele van az egyik tarolo");
+  }
   tft.setCursor(1, 60);
   tft.setTextColor(BLUE); tft.setTextSize(2);
   tft.println("Lassuk mennyi penzed van");   Serial.println(F("Lassuk mennyi penzed van :)"));
@@ -181,7 +188,13 @@ unsigned long coin_state(String erme_neve) {
   sumcoins();
   tft.print("Osszesen:"); tft.setTextColor(RED); tft.print(ermekertekkel[6]);
   tft.setCursor(230, 150); tft.setTextColor(WHITE); tft.setTextSize(3); tft.print(" FT");
-   
+  tft.setCursor(1, 180); tft.setTextSize(1);
+  tft.setTextColor(GREEN); tft.print("5:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[0]);
+  tft.setTextColor(GREEN); tft.print(" 10:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[1]);
+  tft.setTextColor(GREEN); tft.print(" 20:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[2]);
+  tft.setTextColor(GREEN); tft.print(" 50:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[3]);
+  tft.setTextColor(GREEN); tft.print(" 100:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[4]);
+  tft.setTextColor(GREEN); tft.print(" 200:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[5]);
 
     return micros() - start;
 }
