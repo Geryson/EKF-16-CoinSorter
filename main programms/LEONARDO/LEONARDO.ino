@@ -188,6 +188,8 @@ unsigned long coin_state(String erme_neve, bool tele) {
   sumcoins();
   tft.print("Osszesen:"); tft.setTextColor(RED); tft.print(ermekertekkel[6]);
   tft.setCursor(230, 150); tft.setTextColor(WHITE); tft.setTextSize(3); tft.print(" FT");
+
+  tft.fillRect(1, 180, 250, 30, BLACK); //ha lesz idő lehet szépíteni is
   tft.setCursor(1, 180); tft.setTextSize(1);
   tft.setTextColor(GREEN); tft.print("5:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[0]);
   tft.setTextColor(GREEN); tft.print(" 10:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[1]);

@@ -30,6 +30,7 @@ int ermekertekkel[7];
 
 void loop() { 
   digitalWrite(A5,HIGH);
+
   int solar_sum = 0;
 for (int i =0; i< 10; i++) {
  solar_sum += analogRead(A0);
@@ -116,6 +117,7 @@ bool coinsput(int solar)
       }
     }  
     bool folosleg_bool = false;
+    
     if (erme_neve == 5 && ermekertekkel[0] < 10) { standard_motor(standard_szog[0], erme_neve); }
     else {if (erme_neve == 10 && ermekertekkel[1] < 10) { standard_motor(standard_szog[1], erme_neve); } 
     else {if (erme_neve == 20 && ermekertekkel[2] < 10) { standard_motor(standard_szog[2], erme_neve); } 
