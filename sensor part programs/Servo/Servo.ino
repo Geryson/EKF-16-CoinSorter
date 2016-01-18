@@ -7,17 +7,18 @@ Servo myServo;
  
 void setup() { 
    myServo.attach(9);
-   
- 
 }
 void loop() {
-  
-  
-  myServo.write(108);
-  delay(2000);
-  myServo.write(144);
-  delay(2000);
-  myServo.write(180);
-  delay(2000);
-  
+  myServo.write(2);
+  delay(5000);
+  myServo.write(28);
+  delay(5000);
+  myServo.write(54);
+  delay(5000);
+  myServo.write(82);
+  delay(5000);
+  myServo.write(110);
+  delay(5000);
+  myServo.write(138);
+  delay(5000);
 }   
