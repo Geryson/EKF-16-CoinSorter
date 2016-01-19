@@ -9,3 +9,7 @@
 - 1db 2.4" TFT LCD (320*240)/SD - Arduino shield
 - kb. 20-30 db összekötõ vezeték
 - (???) 2db próbapanel
+- méretre vágott kartonpapír-darabok
+- mûanyag ereszcsatorna méretre vágott darabjai
+- régi porszívócsõ méretre vágott darabjai
+- rögzítéshez szükséges csavarok és alátétek
