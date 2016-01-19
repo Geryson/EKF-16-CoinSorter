@@ -1,0 +1,31 @@
+Az ILI chipsethez az Adafruit_GFX, Adafruit_TFT könyvtárak szükségesek.
+
+Az ST7735 chipsethez az SWTFT könyvtár és az ADAFRUIT_GFX/Adafruit_TFT könyvtárak is szükséges.
+
+
+Kijelzõ: 2.4" TFT LCD shield + UNO 328 (a kijelzõ a mcufriend.com szöveget tartalmazza)
+Az ST7781 chipsethez az TFTLCD könyvtár szükséges.
+
+
+Kijelzõ: 2.4" TFT LCD shield + UNO 328 (a kijelzõ a sárga lábú!)
+Az ILI9341/S6D0154X chipset az Adafruit_GFX, Adafruit_TFT könyvtárak kellenek.
+
+
+Kijelzõ: 2.4" TFT LCD shield + UNO 328 (a kijelzõ a sárga lábú!)
+Az ILI9341 könyvtárban levõminták ILI9341/S6D0154X chipset az Adafruit_GFX, Adafruit_TFT könyvtárak kellenek.
+Arduino-165 alatt tesztelve. Touch is.
+A chipID: 0x9341: ILI9341 chip; chipID:101: S6D... chip. A programban kényszerítetten ILI9341 módban kezeli.
+Tipp:  uint16_t identifier = tft.readID();  helyett  uint16_t identifier = 0x9341;//tft.readID();  
+vagy if (identifier == 101) { identifier = 0x9341};
+Touch: 
+#define YP A3
+
+#define XM A2
+#define YM 9
+#define XP 8 
+
+
+Az UTFT általános eszközmeghajtó.
+
+
+Tesztelve: Arduino 1.0.5 alatt.
