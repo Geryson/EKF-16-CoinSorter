@@ -1,6 +1,6 @@
 //POVRay-File created by 3d41.ulp v20110101
 //C:/Users/Rendszergazda/Documents/eagle/CoinSorter PCBs/Arduino_Leonardo-REV3b/Arduino_Leonardo-REV3b.brd
-//2016.01.19. 11:26
+//2016.01.19. 14:09
 
 #version 3.5;
 
@@ -54,7 +54,7 @@
 #local cam_look_y = -5;
 #local cam_look_z = 0;
 
-#local pcb_rotate_x = 0;
+#local pcb_rotate_x = -18;
 #local pcb_rotate_y = 0;
 #local pcb_rotate_z = 0;
 
@@ -98,7 +98,7 @@
 #declare pcb_layer1_used = 1;
 #declare pcb_layer16_used = 1;
 #declare inc_testmode = off;
-#declare global_seed=seed(884);
+#declare global_seed=seed(600);
 #declare global_pcb_layer_dis = array[16]
 {
 	0.000000,
@@ -258,18 +258,24 @@ cylinder{<66.040000,1,7.620000><66.040000,-5,7.620000>1.600000 texture{col_hls}}
 cylinder{<15.240000,1,50.800000><15.240000,-5,50.800000>1.600000 texture{col_hls}}
 cylinder{<13.970000,1,2.540000><13.970000,-5,2.540000>1.600000 texture{col_hls}}
 //Holes(real)/Vias
-prism{0.1,-1.600000,24
-<64.516000,53.340000>
-<66.040000,51.816000><66.040000,40.386000><68.580000,37.846000><68.580000,37.846000>
-<68.580000,5.080000><68.580000,5.080000><66.040000,2.540000><66.040000,2.540000>
-<66.040000,1.000000><66.040000,1.000000><65.040000,0.000000><65.040000,0.000000>
-<1.000000,0.000000><1.000000,0.000000><0.000000,1.000000><0.000000,1.000000>
-<0.000000,52.340000><0.000000,52.340000><1.000000,53.340000><1.000000,53.340000>
-<64.516000,53.340000><66.040000,51.816000><66.040000,40.386000>texture{col_brd}}
 }//End difference(reale Bohrungen/Durchbrüche)
 #end
 #if(pcb_parts=on)//Parts
 union{
+#ifndef(pack_D1) #declare global_pack_D1=yes; object {DIODE_SMD_SMB()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,0> translate<21.590000,0.000000,7.620000>translate<0,0.035000,0> }#end		//DO214 AA D1 M7 SMB
+#ifndef(pack_D2) #declare global_pack_D2=yes; object {DIODE_SMD_MINIMELF("CD1206-S01575",)translate<0,0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,0> translate<58.928000,0.000000,26.670000>translate<0,0.035000,0> }#end		//SMD-Diode MINIMELF-Outline D2 CD1206-S01575 MINIMELF
+#ifndef(pack_IC1) #declare global_pack_IC1=yes; object {IC_SMD_SOT223("NCP1117ST50T3G","ATMEL",)translate<0,0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<16.510000,0.000000,17.145000>translate<0,0.035000,0> }#end		//SOT223 IC1 NCP1117ST50T3G SOT223
+#ifndef(pack_ICSP) #declare global_pack_ICSP=yes; object {CON_PH_2X3()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,0> translate<64.897000,0.000000,27.940000>}#end		//Header 2,54mm Grid 3Pin 2Row (jumper.lib) ICSP ICSP 2X03
+#ifndef(pack_J2) #declare global_pack_J2=yes; object {CON_PH_1X8()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-180.000000,0> rotate<0,0,0> translate<54.610000,0.000000,50.800000>}#end		//Header 2,54mm Grid 8Pin 1Row (jumper.lib) J2 8x1F-H8.5 1X08
+#ifndef(pack_J3) #declare global_pack_J3=yes; object {CON_PH_1X8()translate<0,0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,0> translate<36.830000,0.000000,2.540000>}#end		//Header 2,54mm Grid 8Pin 1Row (jumper.lib) J3 8x1F-H8.5 1X08
+#ifndef(pack_J4) #declare global_pack_J4=yes; object {CON_PH_1X6()translate<0,0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,0> translate<57.150000,0.000000,2.540000>}#end		//Header 2,54mm Grid 6Pin 1Row (jumper.lib) J4 6x1F-H8.5 1X06
+#ifndef(pack_JP1) #declare global_pack_JP1=yes; object {CON_PH_1X10()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-180.000000,0> rotate<0,0,0> translate<30.226000,0.000000,50.800000>}#end		//Header 2,54mm Grid 10Pin 1Row (jumper.lib) JP1 10x1F-H8.5 1X10
+#ifndef(pack_L) #declare global_pack_L=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.300000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.445000,0.000000,20.320000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 L Yellow CHIPLED_0805
+#ifndef(pack_ON) #declare global_pack_ON=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.300000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.445000,0.000000,16.510000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 ON Green CHIPLED_0805
+#ifndef(pack_R2) #declare global_pack_R2=yes; object {RES_SMD_CHIP_0402("00x",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,180> translate<55.880000,-1.500000,14.325600>translate<0,-0.035000,0> }#end		//SMD Resistor 0402 R2 NM R0402
+#ifndef(pack_R3) #declare global_pack_R3=yes; object {RES_SMD_CHIP_0402("00x",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,180> translate<55.880000,-1.500000,14.960600>translate<0,-0.035000,0> }#end		//SMD Resistor 0402 R3 NM R0402
+#ifndef(pack_RX) #declare global_pack_RX=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.300000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.445000,0.000000,27.940000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 RX Yellow CHIPLED_0805
+#ifndef(pack_TX) #declare global_pack_TX=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.300000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.445000,0.000000,24.130000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 TX Yellow CHIPLED_0805
 }//End union
 #end
 #if(pcb_pads_smds=on)
@@ -8049,3 +8055,40 @@ rotate pcb_rotdir*180
 
 
 //Parts not found in 3dpack.dat or 3dusrpac.dat are:
+//C1	100n	C0603-ROUND
+//C2	100n	C0603-ROUND
+//C3	22p	C0603-ROUND
+//C4	22p	C0603-ROUND
+//C5	1uF	C0603-ROUND
+//C6	100n	C0603-ROUND
+//C7	1uF	C0603-ROUND
+//C8	10u	SMC_B
+//C9	100n	C0603-ROUND
+//C10	10u	SMC_B
+//C11	1u	C0603-ROUND
+//C12	10u	SMC_B
+//C13	100n	C0603-ROUND
+//C14	1u	C0603-ROUND
+//C22	100n	C0603-ROUND
+//EXTPOWER	POWERSUPPLY_DC21MMX	POWERSUPPLY_DC-21MM
+//F1	MF-MSMF050-2 500mA	L1812
+//FID1	FIDUCIALMOUNT	FIDUCIA-MOUNT
+//FID2	FIDUCIALMOUNT	FIDUCIA-MOUNT
+//FID3	FIDUCIALMOUNT	FIDUCIA-MOUNT
+//IC2	LMV358IDGKR	MSOP08
+//J1	USB MICRO	CON2_USB_MICRO_B_AT
+//L1	MH2029-300Y	0805
+//L2	MH2029-300Y	0805
+//ORIGIN	TP_SP	TP-SP
+//R1	1M	R0603-ROUND
+//RESET	TS42	TS42
+//RN1	10K	CAY16
+//RN2	1K	CAY16
+//RN3	22R	CAY16
+//T1	FDN340P	SOT-23
+//U1	ATMEGA32U4-XUMU	QFN44ML7X7
+//U2	ATMEGA32U4-XUAU	TQFP44-PAD
+//U3	LP2985-33DBVR	SOT23-DBV
+//Y1	16MHz KX-7	CRYSTAL-3.2-2.5
+//Z1	CG0603MLC-05E	CT/CN0603
+//Z2	CG0603MLC-05E	CT/CN0603
