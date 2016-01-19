@@ -1,6 +1,6 @@
 //POVRay-File created by 3d41.ulp v20110101
 //C:/Users/Rendszergazda/Documents/eagle/CoinSorter PCBs/arduino-micro-reference-design/Arduino_Micro_Rev03j.brd
-//2016.01.19. 11:22
+//2016.01.19. 12:35
 
 #version 3.5;
 
@@ -98,7 +98,7 @@
 #declare pcb_layer1_used = 1;
 #declare pcb_layer16_used = 1;
 #declare inc_testmode = off;
-#declare global_seed=seed(719);
+#declare global_seed=seed(953);
 #declare global_pcb_layer_dis = array[16]
 {
 	0.000000,
@@ -204,28 +204,19 @@ light_source{<lgt4_pos_x,lgt4_pos_y,lgt4_pos_z> White*lgt4_intense}
 union{
 #if(pcb_board = on)
 difference{
-union{
 //Board
-prism{-1.500000,0.000000,8
-<0.000000,0.000000><17.780000,0.000000>
-<17.780000,0.000000><17.780000,48.260000>
-<17.780000,48.260000><0.000000,48.260000>
-<0.000000,48.260000><0.000000,0.000000>
-texture{col_brd}}
-}//End union(PCB)
+box{<17.780000,0,48.260000><0.000000,-1.500000,0.000000> texture{col_brd}}
+
 //Holes(real)/Parts
 //Holes(real)/Board
 //Holes(real)/Vias
-prism{0.1,-1.600000,8
-<0.000000,0.000000>
-<17.780000,0.000000><17.780000,0.000000><17.780000,48.260000><17.780000,48.260000>
-<0.000000,48.260000><0.000000,48.260000><0.000000,0.000000>texture{col_brd}}
 }//End difference(reale Bohrungen/Durchbrüche)
 #end
 #if(pcb_parts=on)//Parts
 union{
 #ifndef(pack_C1) #declare global_pack_C1=yes; object {CAP_SMD_CHIP_0402()translate<0,-0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,180> translate<10.795000,-1.500000,37.846000>translate<0,-0.035000,0> }#end		//SMD Capacitor 0402 C1 100n C0402
 #ifndef(pack_C2) #declare global_pack_C2=yes; object {CAP_SMD_CHIP_0402()translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,180> translate<9.779000,-1.500000,40.640000>translate<0,-0.035000,0> }#end		//SMD Capacitor 0402 C2 100n C0402
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<12.573000,0,33.401000>}		//unbekanntes Bauteil C3 22u SMC_B
 #ifndef(pack_C4) #declare global_pack_C4=yes; object {CAP_SMD_CHIP_0402()translate<0,-0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,180> translate<8.890000,-1.500000,1.016000>translate<0,-0.035000,0> }#end		//SMD Capacitor 0402 C4 1uF C0402
 #ifndef(pack_C5) #declare global_pack_C5=yes; object {CAP_SMD_CHIP_0402()translate<0,0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,0> translate<12.573000,0.000000,28.448000>translate<0,0.035000,0> }#end		//SMD Capacitor 0402 C5 1uF C0402
 #ifndef(pack_C6) #declare global_pack_C6=yes; object {CAP_SMD_CHIP_0402()translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,180> translate<14.224000,-1.500000,9.271000>translate<0,-0.035000,0> }#end		//SMD Capacitor 0402 C6 100n C0402
@@ -235,9 +226,15 @@ union{
 #ifndef(pack_C11) #declare global_pack_C11=yes; object {CAP_SMD_CHIP_0402()translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-315.000000,0> rotate<0,0,180> translate<12.954000,-1.500000,22.225000>translate<0,-0.035000,0> }#end		//SMD Capacitor 0402 C11 100n C0402
 #ifndef(pack_C12) #declare global_pack_C12=yes; object {CAP_SMD_CHIP_0402()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-180.000000,0> rotate<0,0,0> translate<6.604000,0.000000,29.718000>translate<0,0.035000,0> }#end		//SMD Capacitor 0402 C12 22pF C0402
 #ifndef(pack_C13) #declare global_pack_C13=yes; object {CAP_SMD_CHIP_0402()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-180.000000,0> rotate<0,0,0> translate<3.556000,0.000000,32.385000>translate<0,0.035000,0> }#end		//SMD Capacitor 0402 C13 22pF C0402
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<4.191000,0,4.953000>}		//unbekanntes Bauteil C14 22u SMC_B
 #ifndef(pack_D2) #declare global_pack_D2=yes; object {DIODE_SMD_MINIMELF("CD1206-S01575",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,180> translate<6.858000,-1.500000,42.291000>translate<0,-0.035000,0> }#end		//SMD-Diode MINIMELF-Outline D2 CD1206-S01575 MINIMELF
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<5.207000,0,12.700000>}		//unbekanntes Bauteil F1 MF-MSMF050-2 500mA L1812
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<8.890000,0,1.447800>}		//unbekanntes Bauteil J3 USB-MICRO!!! CON2_USB_MICRO_B_AT
 #ifndef(pack_J4) #declare global_pack_J4=yes; object {CON_PH_2X3()translate<0,0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<12.700000,0.000000,43.180000>}#end		//Header 2,54mm Grid 3Pin 2Row (jumper.lib) J4 3x2M 2X03
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<1.270000,0,44.450000>}		//unbekanntes Bauteil J5 HEAD17-NOSS HEAD17-NOSS
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<16.510000,0,44.450000>}		//unbekanntes Bauteil J6 HEAD17-NOSS-1 HEAD17-NOSS-1
 #ifndef(pack_L) #declare global_pack_L=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.500000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-270.000000,0> rotate<0,0,0> translate<8.890000,0.000000,13.970000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 L green CHIPLED_0805
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<14.859000,0,30.480000>}		//unbekanntes Bauteil L2 MH2029-300Y 0805
 #ifndef(pack_ON) #declare global_pack_ON=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.500000,0.000000,)translate<0,-0,0> rotate<0,90.000000,0>rotate<0,-270.000000,0> rotate<0,0,180> translate<8.890000,-1.500000,2.921000>translate<0,-0.035000,0> }#end		//SMD-LED im 0805 ON blue CHIPLED_0805
 #ifndef(pack_R1) #declare global_pack_R1=yes; object {RES_SMD_CHIP_0402("103",)translate<0,0,0> rotate<0,0.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<14.859000,0.000000,33.401000>translate<0,0.035000,0> }#end		//SMD Resistor 0402 R1 10K R0402
 #ifndef(pack_R2) #declare global_pack_R2=yes; object {RES_SMD_CHIP_0402("103",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-135.000000,0> rotate<0,0,180> translate<10.350500,-1.500000,25.146000>translate<0,-0.035000,0> }#end		//SMD Resistor 0402 R2 10K R0402
@@ -247,9 +244,21 @@ union{
 #ifndef(pack_R7) #declare global_pack_R7=yes; object {RES_SMD_CHIP_0402("102",)translate<0,0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,0> translate<6.985000,0.000000,35.560000>translate<0,0.035000,0> }#end		//SMD Resistor 0402 R7 1K R0402
 #ifndef(pack_R8) #declare global_pack_R8=yes; object {RES_SMD_CHIP_0402("102",)translate<0,0,0> rotate<0,0.000000,0>rotate<0,0.000000,0> rotate<0,0,0> translate<5.715000,0.000000,13.970000>translate<0,0.035000,0> }#end		//SMD Resistor 0402 R8 1K R0402
 #ifndef(pack_R9) #declare global_pack_R9=yes; object {RES_SMD_CHIP_0402("103",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-180.000000,0> rotate<0,0,180> translate<10.795000,-1.500000,38.938200>translate<0,-0.035000,0> }#end		//SMD Resistor 0402 R9 10K R0402
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<6.223000,0,43.053000>}		//unbekanntes Bauteil RESET TS42 TS42
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<8.890000,0,11.176000>}		//unbekanntes Bauteil RP3 22R CAY16
 #ifndef(pack_RX) #declare global_pack_RX=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.500000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.572000,0.000000,35.560000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 RX yellow CHIPLED_0805
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<13.398500,0,30.480000>}		//unbekanntes Bauteil T1 FDN340P/PMV48XP SOT-23
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<13.335000,0,37.719000>}		//unbekanntes Bauteil T2 PMV48XP SOT-23
 #ifndef(pack_TX) #declare global_pack_TX=yes; object {DIODE_SMD_LED_CHIP_0805(Red,0.500000,0.000000,)translate<0,0,0> rotate<0,90.000000,0>rotate<0,-90.000000,0> rotate<0,0,0> translate<4.572000,0.000000,33.655000>translate<0,0.035000,0> }#end		//SMD-LED im 0805 TX yellow CHIPLED_0805
-#ifndef(pack_U2) #declare global_pack_U2=yes; object {IC_SMD_SOT223("NCP1117-5","",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,180> translate<7.493000,-1.500000,34.163000>translate<0,-0.035000,0> }#end		//SOT223 U2 NCP1117-5 SOT223
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<-4.699000,0,-22.479000>}		//unbekanntes Bauteil U$3 DISCLAIMER DISCLAIMER
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<4.572000,0,43.942000>}		//unbekanntes Bauteil U$37 FIDUCIALMOUNT FIDUCIA-MOUNT
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<3.810000,0,46.736000>}		//unbekanntes Bauteil U$53 FIDUCIAL1X2 FIDUCIAL-1X2
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<8.890000,0,21.590000>}		//unbekanntes Bauteil U1 ATMEGA32U4-XUMU QFN44ML7X7
+#ifndef(pack_U2) #declare global_pack_U2=yes; object {IC_SMD_SOT223("NCP1117-5","ATMEL",)translate<0,-0,0> rotate<0,0.000000,0>rotate<0,-270.000000,0> rotate<0,0,180> translate<7.493000,-1.500000,34.163000>translate<0,-0.035000,0> }#end		//SOT223 U2 NCP1117-5 SOT223
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<13.208000,0,4.699000>}		//unbekanntes Bauteil U4 LP2985-33DBVR SOT23-DBV
+cylinder{<0,0,0><0,7*1.000000,0>0.5 pigment{Red filter 0.2} translate<4.318000,0,29.845000>}		//unbekanntes Bauteil Y3 16MHz KX-7 CRYSTAL-3.2-2.5
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<10.033000,0,7.874000>}		//unbekanntes Bauteil Z1 CG0603MLC-05E CT/CN0603
+cylinder{<0,0,0><0,7*-1.000000,0>0.5 pigment{Red filter 0.2} translate<10.033000,0,6.223000>}		//unbekanntes Bauteil Z2 CG0603MLC-05E CT/CN0603
 }//End union
 #end
 #if(pcb_pads_smds=on)
