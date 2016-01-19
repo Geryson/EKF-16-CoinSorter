@@ -8,11 +8,18 @@
 Servo myServo;
 
 bool van_erme = false;
+int kezdetiFeszultseg;
 void setup() {
     Serial.begin(9600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  int feszultsegOsszeg = 0;
+  for (int i =0; i< 10; i++) {
+ feszultsegOsszeg += analogRead(A0);
+ int kezdetiFeszultseg = feszultsegOsszeg / 10;
+}
+ 
 
 pinMode(A5, OUTPUT);
 
