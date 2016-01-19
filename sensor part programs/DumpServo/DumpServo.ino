@@ -6,13 +6,16 @@
 Servo myServo;
  
 void setup() { 
-   myServo.attach(9);
+    myServo.attach(9);
+    myServo.writeMicroseconds(1300);
+    delay(400);
+    myServo.writeMicroseconds(1700);
+    delay(421);
+    myServo.writeMicroseconds(1515);
+    delay(500);  
 }
 void loop() {
-  myServo.writeMicroseconds(1300);
-  delay(500);
-  myServo.writeMicroseconds(1700);
-  delay(522);
-  myServo.writeMicroseconds(1515);
-  delay(500);
+  
+    
+    
 }   
