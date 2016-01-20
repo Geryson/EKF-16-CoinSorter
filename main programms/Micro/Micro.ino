@@ -11,6 +11,7 @@ bool van_erme = false;
 int kezdetiFeszultseg;
 
 pinMode(A0, OUTPUT);
+pinMode(7, INPUT);
 
 void setup() {
     Serial.begin(9600);
@@ -68,15 +69,19 @@ void standard_motor (int szog)
 
 void continous_motor() {
   //órajárással megegyező irányba és vissza
+  
   myServo.attach(motor_continous);
  
   myServo.writeMicroseconds(1300);
-  delay(500);
-  myServo.writeMicroseconds(1700);
-  delay(522);
-  myServo.writeMicroseconds(1515);
-  delay(500);
+  delay(300);
   myServo.detach();
+  
+  while(digitalRead(7)==1){
+    myservo.attach(9);
+    myservo.writeMicroseconds(1545);
+    delay(50);
+    myservo.detach();
+  }
 }
 
 bool coinsput(int solar)
