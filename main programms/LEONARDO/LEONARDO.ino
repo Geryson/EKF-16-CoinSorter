@@ -29,6 +29,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 int value;
 //int coinsnumber[6]; //a felhasználó által megadott értékek eltárolására (csak ki kérni való érmékhez)
 int ermekertekkel[7];
+int ermedb[6];
 
 
 void setup() {
@@ -88,11 +89,15 @@ void loop() {
   tft.setRotation(1);
 
 //Serial.println(); Serial.println(analogRead(A5));
-
-  int solar = analogRead(A5)* 4;
+  int solar_sum = 0;
+for (int i =0; i< 10; i++) {
+ solar_sum += analogRead(A5);
+}
+  int solar = solar_sum / 10;
   Serial.println(solar);
   coinsput(solar);
- delay (2000);
+
+  delay(1000);
 
 }
 
@@ -145,11 +150,13 @@ bool coinsput(int solar)
     }
 
 bool tele = true;
-    if (ermekertekkel[0] < 10 && ermekertekkel[1] < 10 && ermekertekkel[2] < 10 && ermekertekkel[3] < 10 && ermekertekkel[4] < 10 && ermekertekkel[5] < 10)
+coinsread();
+    if (ermedb[0] < 10 && ermedb[1] < 10 && ermedb[2] < 10 && ermedb[3] < 10 && ermedb[4] < 10 && ermedb[5] < 10)
   {
     coinsadd(erme_neve.toInt()); tele = false;
+    coin_state(erme_neve, tele);
   }
-   coin_state(erme_neve, tele);
+   
 
     van_erme = false;
     delay(500);
@@ -175,7 +182,7 @@ unsigned long coin_state(String erme_neve, bool tele) {
   }
   tft.setCursor(1, 60);
   tft.setTextColor(BLUE); tft.setTextSize(2);
-  tft.println("Lassuk mennyi penzed van");   Serial.println(F("Lassuk mennyi penzed van :)"));
+  tft.println("Lassuk mennyi penzed van"); 
   tft.setCursor(1, 80);
   tft.setTextColor(WHITE);  tft.setTextSize(4);
   tft.println("Actual coin:");
@@ -191,12 +198,13 @@ unsigned long coin_state(String erme_neve, bool tele) {
 
   tft.fillRect(1, 180, 250, 30, BLACK); //ha lesz idő lehet szépíteni is
   tft.setCursor(1, 180); tft.setTextSize(1);
-  tft.setTextColor(GREEN); tft.print("5:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[0]);
-  tft.setTextColor(GREEN); tft.print(" 10:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[1]);
-  tft.setTextColor(GREEN); tft.print(" 20:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[2]);
-  tft.setTextColor(GREEN); tft.print(" 50:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[3]);
-  tft.setTextColor(GREEN); tft.print(" 100:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[4]);
-  tft.setTextColor(GREEN); tft.print(" 200:"); tft.setTextColor(CYAN); tft.print(ermekertekkel[5]);
+  coinsread();
+  tft.setTextColor(GREEN); tft.print("5:"); tft.setTextColor(CYAN); tft.print(ermedb[0]);
+  tft.setTextColor(GREEN); tft.print(" 10:"); tft.setTextColor(CYAN); tft.print(ermedb[1]);
+  tft.setTextColor(GREEN); tft.print(" 20:"); tft.setTextColor(CYAN); tft.print(ermedb[2]);
+  tft.setTextColor(GREEN); tft.print(" 50:"); tft.setTextColor(CYAN); tft.print(ermedb[3]);
+  tft.setTextColor(GREEN); tft.print(" 100:"); tft.setTextColor(CYAN); tft.print(ermedb[4]);
+  tft.setTextColor(GREEN); tft.print(" 200:"); tft.setTextColor(CYAN); tft.print(ermedb[5]);
 
     return micros() - start;
 }
@@ -214,7 +222,7 @@ unsigned long welcome() {
   tft.println("Szep napot!");
   tft.setCursor(1, 60);
   tft.setTextColor(BLUE); tft.setTextSize(2);
-  tft.println("Lassuk mennyi penzed van");   Serial.println(F("Lassuk mennyi penzed van :)"));
+  tft.println("Lassuk mennyi penzed van");   
 
   return micros() - start;
 }
@@ -231,6 +239,18 @@ void sumcoins()
   ermekertekkel[4] = EEPROM.read(4) * 100;
   ermekertekkel[5] = EEPROM.read(5) * 200;
 
+for (int i = 0; i < 6; i++)
+  {
+    sum += ermekertekkel[i];
+
+  }
+  ermekertekkel[6] = sum;
+    value = ermekertekkel[6];
+
+  Serial.print("Osszesen");
+  Serial.print("\t");
+  Serial.print(value, DEC);
+  Serial.println();
   
 }
 
@@ -347,13 +367,12 @@ void coinsclear(byte id) {
 
 }
 
-byte coinsread() {
-  byte ermek[6];
-  ermek[0] = EEPROM.read(0);
-  ermek[1] = EEPROM.read(1);
-  ermek[2] = EEPROM.read(2);
-  ermek[3] = EEPROM.read(3);
-  ermek[4] = EEPROM.read(4);
-  ermek[5] = EEPROM.read(5);
-  return *ermek;
+void coinsread() {
+  ermedb[0] = EEPROM.read(0);
+  ermedb[1] = EEPROM.read(1);
+  ermedb[2] = EEPROM.read(2);
+  ermedb[3] = EEPROM.read(3);
+  ermedb[4] = EEPROM.read(4);
+  ermedb[5] = EEPROM.read(5);
+
 }
