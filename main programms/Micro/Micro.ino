@@ -9,6 +9,9 @@ Servo myServo;
 
 bool van_erme = false;
 int kezdetiFeszultseg;
+
+pinMode(A0, OUTPUT);
+
 void setup() {
     Serial.begin(9600);
   while (!Serial) {
@@ -21,7 +24,7 @@ void setup() {
 }
  
 
-pinMode(A5, OUTPUT);
+
 
 for (int i=0; i <10; i++) {
     coinsclear(i);
@@ -36,8 +39,6 @@ int ermekertekkel[7];
    
 
 void loop() { 
-  digitalWrite(A5,HIGH);
-
   int solar_sum = 0;
 for (int i =0; i< 10; i++) {
  solar_sum += analogRead(A0);
@@ -57,7 +58,7 @@ void folosleg ()
    {continous_motor();} 
 }
 
-void standard_motor (int szog, int erme_neve)
+void standard_motor (int szog)
 {
   myServo.attach(motor_standard);
    myServo.write(szog);
@@ -74,20 +75,19 @@ void continous_motor() {
   myServo.writeMicroseconds(1700);
   delay(522);
   myServo.writeMicroseconds(1515);
+  delay(500);
   myServo.detach();
-  //  delay(500);
 }
 
 bool coinsput(int solar)
 {
-  van_erme = true;
-  bool r = false;
-  if (van_erme) {
-    r = true;
+  if(solar != kezdetiFeszultseg){
+    van_erme = true;
   }
   
-  
   if (van_erme) {
+    
+  
     //erme vizsgálat hogy milyen érme van
 
     //cimek:0-5-ig 5-200-ig növekvősorrendbe
@@ -125,12 +125,12 @@ bool coinsput(int solar)
     }  
     bool folosleg_bool = false;
     
-    if (erme_neve == 5 && ermekertekkel[0] < 10) { standard_motor(standard_szog[0], erme_neve); }
-    else {if (erme_neve == 10 && ermekertekkel[1] < 10) { standard_motor(standard_szog[1], erme_neve); } 
-    else {if (erme_neve == 20 && ermekertekkel[2] < 10) { standard_motor(standard_szog[2], erme_neve); } 
-    else {if (erme_neve == 50 && ermekertekkel[3] < 10) { standard_motor(standard_szog[3], erme_neve); } 
-    else {if (erme_neve == 200 && ermekertekkel[4] < 10) { standard_motor(standard_szog[4], erme_neve); } 
-    else {if (erme_neve == 100 && ermekertekkel[5] < 10) { standard_motor(standard_szog[5], erme_neve); }
+    if (erme_neve == 5 && ermekertekkel[0] < 10) { standard_motor(standard_szog[0]); }
+    else {if (erme_neve == 10 && ermekertekkel[1] < 10) { standard_motor(standard_szog[1]); } 
+    else {if (erme_neve == 20 && ermekertekkel[2] < 10) { standard_motor(standard_szog[2]); } 
+    else {if (erme_neve == 50 && ermekertekkel[3] < 10) { standard_motor(standard_szog[3]); } 
+    else {if (erme_neve == 200 && ermekertekkel[4] < 10) { standard_motor(standard_szog[4]); } 
+    else {if (erme_neve == 100 && ermekertekkel[5] < 10) { standard_motor(standard_szog[5]); }
     else {folosleg (); folosleg_bool = false;}}}}}}
 
     if (! folosleg_bool) { coinsadd(erme_neve); }
@@ -144,8 +144,6 @@ bool coinsput(int solar)
   
   van_erme = false;
   }
-
-  return r;
 }
 
 void sumcoins()
@@ -159,6 +157,14 @@ void sumcoins()
   ermekertekkel[4] = EEPROM.read(4) * 100;
   ermekertekkel[5] = EEPROM.read(5) * 200;
 
+  for (int i = 0; i < 6; i++)
+  {
+    sum += ermekertekkel[i];
+
+  
+
+  }
+  ermekertekkel[6] = sum;
   
 }
 
@@ -200,15 +206,4 @@ bool coinsmodify(byte id, byte value) {
 void coinsclear(byte id) {
   EEPROM.write(id,0);
 
-}
-
-byte coinsread() {
-  byte ermek[6];
-  ermek[0] = EEPROM.read(0);
-  ermek[1] = EEPROM.read(1);
-  ermek[2] = EEPROM.read(2);
-  ermek[3] = EEPROM.read(3);
-  ermek[4] = EEPROM.read(4);
-  ermek[5] = EEPROM.read(5);
-  return *ermek;
 }
