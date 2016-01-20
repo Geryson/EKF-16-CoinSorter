@@ -96,10 +96,18 @@ for (int i =0; i< 10; i++) {
   int solar = solar_sum / 10;
   Serial.println(solar);
   coinsput(solar);
-
-  delay(1000);
+/*
+  while (digitalRead(11) == 1) //tilt sensor
+  {
+  tft.setCursor(1, 200);
+  tft.setTextColor(CYAN); tft.setTextSize(1);
+  tft.println("Erme elhelyezese folyamatban"); 
+  }
+  tft.fillRect(1, 200, 400, 30, BLACK);
+  */
 
 }
+
 
 bool coinsput(int solar)
 {
@@ -159,7 +167,7 @@ coinsread();
    
 
     van_erme = false;
-    delay(500);
+    
   
   }
 
