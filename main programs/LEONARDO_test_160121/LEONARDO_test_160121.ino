@@ -271,6 +271,7 @@ for (int i = 0; i < 6; i++)
   Serial.print("\t");
   Serial.print(value, DEC);
   Serial.println();
+  Serial.print("0");
   
 }
 
