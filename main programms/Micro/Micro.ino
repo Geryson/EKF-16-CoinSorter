@@ -10,39 +10,61 @@ Servo myServo;
 bool van_erme = false;
 int kezdetiFeszultseg;
 
-pinMode(A0, OUTPUT);
-pinMode(7, INPUT);
+
+int motor_standard = 9; //(PWM)
+  int motor_continous = 10; //(PWM)
+  int standard_szog[6] = {2,28,54,82,110,138} ;
 
 void setup() {
+  pinMode(5, INPUT);
     Serial.begin(9600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
   int feszultsegOsszeg = 0;
+  
   for (int i =0; i< 10; i++) {
- feszultsegOsszeg += analogRead(A0);
- int kezdetiFeszultseg = feszultsegOsszeg / 10;
+ feszultsegOsszeg += analogRead(A0)*5;
 }
- 
+int kezdetiFeszultseg = feszultsegOsszeg / 10;
+ Serial.println(kezdetiFeszultseg);
 
 
 
 for (int i=0; i <10; i++) {
     coinsclear(i);
   }
+
+  //a biztonság kedvéért megforgatjuk egyszer a continuous motort,
+  //hogy induláskor a megfelelő helyen legyen
+  myServo.attach(motor_continous);
+ 
+  myServo.writeMicroseconds(1300);
+  delay(300);
+  myServo.detach();
+  
+  while(digitalRead(5)==1){
+    myServo.attach(motor_continous);
+    myServo.writeMicroseconds(1545);
+    delay(50);
+    myServo.detach();
+  }
 }
 
 int ermekertekkel[7];
 
-  int motor_standard = 9; //(PWM)
-  int motor_continous = 10; //(PWM)
-  int standard_szog[6] = {2,28,54,82,110,138} ;
+  
    
 
 void loop() { 
+  //a végrehajtás pontossága megköveteli, hogy a solar-szenzor
+  //csak meghatározott időközönként ellenőrizzen, 2 másodpercenként
+  //reagálhat a változásokra
+  delay(2000);
+  
   int solar_sum = 0;
 for (int i =0; i< 10; i++) {
- solar_sum += analogRead(A0);
+ solar_sum += analogRead(A0)*5;
 }
  int solar = solar_sum / 10;
   Serial.println(solar);
@@ -56,6 +78,9 @@ void folosleg ()
 {
   myServo.attach(motor_standard);
   myServo.write(170);
+  //hagyunk időt az elforduláshoz, hogy ne forogjon 2 motor
+  //egyszerre
+  delay(1000);
    {continous_motor();} 
 }
 
@@ -63,6 +88,9 @@ void standard_motor (int szog)
 {
   myServo.attach(motor_standard);
    myServo.write(szog);
+   //hagyunk időt az elforduláshoz, hogy ne forogjon 2 motor
+  //egyszerre
+   delay(1000);
    {continous_motor();} 
 
 }
@@ -76,17 +104,18 @@ void continous_motor() {
   delay(300);
   myServo.detach();
   
-  while(digitalRead(7)==1){
-    myservo.attach(9);
-    myservo.writeMicroseconds(1545);
+  while(digitalRead(5)==1){
+    myServo.attach(motor_continous);
+    myServo.writeMicroseconds(1545);
     delay(50);
-    myservo.detach();
+    myServo.detach();
   }
 }
 
 bool coinsput(int solar)
 {
-  if(solar != kezdetiFeszultseg){
+  //555 feletti érték esetén nincs bedobva érme
+  if(solar < 555){
     van_erme = true;
   }
   
@@ -100,27 +129,27 @@ bool coinsput(int solar)
 
    int erme_neve = 0; //ide a megvizsgált érme neve kell (5-200)
 
-    if ( solar < 20 ) {
+    if ( solar < 15 ) {
       erme_neve = 200;
     }
     else {
-      if ( solar < 30 ) {
-        erme_neve = 100;
+      if ( solar < 90 ) {
+        erme_neve = 50;
       }
       else {
-        if ( solar < 40 ) {
-          erme_neve = 50;
+        if ( solar < 220 ) {
+          erme_neve = 20;
         }
         else {
-          if ( solar < 60 ) {
-            erme_neve = 20;
+          if ( solar < 255 ) {
+            erme_neve = 10;
           }
           else {
-            if ( solar < 80 ) {
-              erme_neve = 10;
+            if ( solar < 430 ) {
+              erme_neve = 100;
             }
             else {
-              if ( solar < 100 ) {
+              if ( solar < 550 ) {
                 erme_neve = 5;
               }
             }
