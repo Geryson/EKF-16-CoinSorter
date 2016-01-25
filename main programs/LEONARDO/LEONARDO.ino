@@ -101,7 +101,7 @@ for (int i =0; i< 10; i++) {
   {
   tft.setCursor(1, 200);
   tft.setTextColor(CYAN); tft.setTextSize(1);
-  tft.println("Erme elhelyezese folyamatban"); 
+  tft.println("In progress"); 
   }
   tft.fillRect(1, 200, 400, 30, BLACK);
   */
