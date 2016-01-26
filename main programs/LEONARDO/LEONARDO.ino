@@ -112,7 +112,7 @@ for (int i =0; i< 10; i++) {
 bool coinsput(int solar)
 {
   bool van_erme = false;
-  if ( solar < 100 ) {
+  if ( solar < 550 ) {
    van_erme = true;
   }
   bool r = false;
@@ -128,27 +128,27 @@ bool coinsput(int solar)
 
     String erme_neve = ""; //ide a megvizsgált érme neve kell (5-200)
 
-    if ( solar < 20 ) {
+    if ( solar < 15 ) {
       erme_neve = 200;
     }
     else {
-      if ( solar < 30 ) {
-        erme_neve = 100;
+      if ( solar < 90 ) {
+        erme_neve = 50;
       }
       else {
-        if ( solar < 40 ) {
-          erme_neve = 50;
+        if ( solar < 220 ) {
+          erme_neve = 20;
         }
         else {
-          if ( solar < 60 ) {
-            erme_neve = 20;
+          if ( solar < 255 ) {
+            erme_neve = 10;
           }
           else {
-            if ( solar < 80 ) {
-              erme_neve = 10;
+            if ( solar < 430 ) {
+              erme_neve = 100;
             }
             else {
-              if ( solar < 100 ) {
+              if ( solar < 550 ) {
                 erme_neve = 5;
               }
             }
